@@ -32,8 +32,10 @@ var markerExpanded, markerCollapsed = func() (string, string) {
 }()
 
 // buildTree scans root concurrently with fastwalk (the same walker fzf uses
-// internally), skipping hidden files, and returns the root node. Children are
-// sorted: directories first, then files.
+// internally), skipping hidden files, and returns the root node. This is a
+// full scan used by search mode, where every path must be a candidate; tree
+// mode uses buildTreeLazy instead. Children are sorted: directories first,
+// then files.
 func buildTree(root string) *Node {
 	rootNode := &Node{Name: filepath.Base(root), Path: root, IsDir: true}
 	type entry struct {
@@ -75,15 +77,50 @@ func buildTree(root string) *Node {
 		}
 	}
 	for _, n := range nodes {
-		sort.Slice(n.Children, func(i, j int) bool {
-			a, b := n.Children[i], n.Children[j]
-			if a.IsDir != b.IsDir {
-				return a.IsDir // directories first
-			}
-			return a.Name < b.Name
-		})
+		sortChildren(n)
 	}
 	return rootNode
+}
+
+// buildTreeLazy scans only what the tree view needs: the root plus every
+// directory marked expanded. Collapsed directories are listed but not
+// descended into, so opening fzt on a huge tree (node_modules, monorepos)
+// stays instant. A single ReadDir per expanded directory is cheap enough
+// that no concurrent walker is needed here.
+func buildTreeLazy(root string, expanded map[string]bool) *Node {
+	rootNode := &Node{Name: filepath.Base(root), Path: root, IsDir: true}
+	var scan func(n *Node)
+	scan = func(n *Node) {
+		entries, err := os.ReadDir(n.Path)
+		if err != nil { // unreadable or vanished dir: render it empty
+			return
+		}
+		for _, e := range entries {
+			if strings.HasPrefix(e.Name(), ".") { // skip hidden files
+				continue
+			}
+			child := &Node{Name: e.Name(), Path: filepath.Join(n.Path, e.Name()), IsDir: e.IsDir()}
+			n.Children = append(n.Children, child)
+			if child.IsDir && expanded[child.Path] {
+				scan(child)
+			}
+		}
+		sortChildren(n)
+	}
+	scan(rootNode)
+	return rootNode
+}
+
+// sortChildren sorts a node's children in place: directories first, then
+// files, alphabetically within each group.
+func sortChildren(n *Node) {
+	sort.Slice(n.Children, func(i, j int) bool {
+		a, b := n.Children[i], n.Children[j]
+		if a.IsDir != b.IsDir {
+			return a.IsDir // directories first
+		}
+		return a.Name < b.Name
+	})
 }
 
 // relpath returns n's path relative to root, falling back to the full path.

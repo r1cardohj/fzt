@@ -57,7 +57,9 @@ func cmdUI(rootArg string, extraOpts []string) int {
 	}
 
 	// Initial list via channel; subsequent updates happen through reload.
-	initial := rows(buildTree(abs), map[string]bool{abs: true})
+	// Lazy scan: only the root is expanded at startup, so a huge tree opens
+	// instantly.
+	initial := rows(buildTreeLazy(abs, map[string]bool{abs: true}), map[string]bool{abs: true})
 	opts.Input = make(chan string, len(initial))
 	for _, line := range initial {
 		opts.Input <- line

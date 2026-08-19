@@ -24,18 +24,19 @@ func searchRowsCmd(sessionDir string) string {
 	return shellQuote(exe) + " __rows --session " + shellQuote(sessionDir) + " --search"
 }
 
-// cmdRows prints candidate lines: the indented tree view honoring collapsed
-// dirs, or (with --search) the flat full-path list for readable search
-// results.
+// cmdRows prints candidate lines. Tree mode lazily scans only the expanded
+// directories; search mode needs every path as a candidate, so it falls
+// back to a full fastwalk scan.
 func cmdRows(sessionDir string, search bool) {
-	root := buildTree(sessionRoot(sessionDir))
+	root := sessionRoot(sessionDir)
 	if search {
-		for _, line := range pathRows(root) {
+		for _, line := range pathRows(buildTree(root)) {
 			fmt.Println(line)
 		}
 		return
 	}
-	for _, line := range rows(root, loadExpanded(sessionDir)) {
+	expanded := loadExpanded(sessionDir)
+	for _, line := range rows(buildTreeLazy(root, expanded), expanded) {
 		fmt.Println(line)
 	}
 }
