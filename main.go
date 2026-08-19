@@ -16,13 +16,14 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	fzf "github.com/junegunn/fzf/src"
 	"github.com/junegunn/fzf/src/protector"
 )
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: fzt [directory]")
+	fmt.Fprintln(os.Stderr, "usage: fzt [--height=HEIGHT] [directory]")
 	os.Exit(fzf.ExitError)
 }
 
@@ -54,10 +55,15 @@ func main() {
 		}
 	}
 	root := "."
-	if len(args) > 0 {
-		root = args[0]
+	var extraOpts []string
+	for _, a := range args {
+		if strings.HasPrefix(a, "--height") {
+			extraOpts = append(extraOpts, a) // passed through to fzf
+		} else {
+			root = a
+		}
 	}
-	os.Exit(cmdUI(root))
+	os.Exit(cmdUI(root, extraOpts))
 }
 
 func flagValue(args []string, name string) string {

@@ -10,7 +10,8 @@ import (
 )
 
 // cmdUI runs the embedded fzf UI and prints the selected path to stdout.
-func cmdUI(rootArg string) int {
+// extraOpts (e.g. --height=40%%) are appended to the fzf options.
+func cmdUI(rootArg string, extraOpts []string) int {
 	abs, err := filepath.Abs(rootArg)
 	if err != nil || !isDir(abs) {
 		fmt.Fprintf(os.Stderr, "fzt: %s is not a directory\n", rootArg)
@@ -30,7 +31,7 @@ func cmdUI(rootArg string) int {
 	searchMode := "execute-silent(" + shellQuote(exe) + " __mode --session " + shellQuote(sessionDir) + " search)" +
 		"+show-input+enable-search+unbind(j,k)+change-prompt(search> )" +
 		"+reload-sync(" + searchRowsCmd(sessionDir) + ")"
-	opts, err := fzf.ParseOptions(true, []string{
+	fzfArgs := []string{
 		"--delimiter", "\t",
 		"--nth", "1", // search the path field
 		"--with-nth", "2", // display the tree/path line
@@ -48,7 +49,8 @@ func cmdUI(rootArg string) int {
 		"--bind", "/:" + searchMode,
 		"--bind", "enter:transform(" + shellQuote(exe) + " __enter --session " + shellQuote(sessionDir) + " -- {})",
 		"--bind", "esc:transform(" + shellQuote(exe) + " __esc --session " + shellQuote(sessionDir) + ")",
-	})
+	}
+	opts, err := fzf.ParseOptions(true, append(fzfArgs, extraOpts...))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "fzt:", err)
 		return fzf.ExitError
