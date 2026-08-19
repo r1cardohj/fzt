@@ -17,28 +17,28 @@ Download a prebuilt binary from
 
 ```bash
 # amd64 (x86_64)
-curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-linux-amd64.tar.gz
-tar xzf fzt-v0.0.1-linux-amd64.tar.gz
-sudo install -m755 fzt-v0.0.1-linux-amd64/fzt /usr/local/bin/
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.2/fzt-v0.0.2-linux-amd64.tar.gz
+tar xzf fzt-v0.0.2-linux-amd64.tar.gz
+sudo install -m755 fzt-v0.0.2-linux-amd64/fzt /usr/local/bin/
 
 # arm64 (e.g. Raspberry Pi, ARM servers)
-curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-linux-arm64.tar.gz
-tar xzf fzt-v0.0.1-linux-arm64.tar.gz
-sudo install -m755 fzt-v0.0.1-linux-arm64/fzt /usr/local/bin/
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.2/fzt-v0.0.2-linux-arm64.tar.gz
+tar xzf fzt-v0.0.2-linux-arm64.tar.gz
+sudo install -m755 fzt-v0.0.2-linux-arm64/fzt /usr/local/bin/
 ```
 
 ### macOS
 
 ```bash
 # Apple Silicon (M1/M2/M3...)
-curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-darwin-arm64.tar.gz
-tar xzf fzt-v0.0.1-darwin-arm64.tar.gz
-sudo install -m755 fzt-v0.0.1-darwin-arm64/fzt /usr/local/bin/
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.2/fzt-v0.0.2-darwin-arm64.tar.gz
+tar xzf fzt-v0.0.2-darwin-arm64.tar.gz
+sudo install -m755 fzt-v0.0.2-darwin-arm64/fzt /usr/local/bin/
 
 # Intel
-curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-darwin-amd64.tar.gz
-tar xzf fzt-v0.0.1-darwin-amd64.tar.gz
-sudo install -m755 fzt-v0.0.1-darwin-amd64/fzt /usr/local/bin/
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.2/fzt-v0.0.2-darwin-amd64.tar.gz
+tar xzf fzt-v0.0.2-darwin-amd64.tar.gz
+sudo install -m755 fzt-v0.0.2-darwin-amd64/fzt /usr/local/bin/
 ```
 
 ### With Go
