@@ -18,6 +18,19 @@ type Node struct {
 	Children []*Node
 }
 
+// Directory markers. ▸/▾ are East-Asian-ambiguous-width glyphs and break the
+// layout on CJK terminals that render them double-width, so fall back to
+// plain ASCII there.
+var markerExpanded, markerCollapsed = func() (string, string) {
+	locale := os.Getenv("LC_ALL") + os.Getenv("LC_CTYPE") + os.Getenv("LANG")
+	for _, p := range []string{"zh", "ja", "ko"} {
+		if strings.Contains(locale, p) {
+			return "- ", "+ "
+		}
+	}
+	return "▾ ", "▸ "
+}()
+
 // buildTree scans root concurrently with fastwalk (the same walker fzf uses
 // internally), skipping hidden files, and returns the root node. Children are
 // sorted: directories first, then files.
@@ -93,9 +106,9 @@ func rows(root *Node, expanded map[string]bool) []string {
 		b.WriteString(strings.Repeat("  ", depth))
 		if n.IsDir {
 			if expanded[n.Path] {
-				b.WriteString("▾ ")
+				b.WriteString(markerExpanded)
 			} else {
-				b.WriteString("▸ ")
+				b.WriteString(markerCollapsed)
 			}
 		} else {
 			b.WriteString("  ")

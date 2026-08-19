@@ -41,7 +41,7 @@ func cmdUI(rootArg string) int {
 		"--disabled", // tree mode: pure navigation, no query input
 		"--layout", "reverse",
 		"--prompt", "fzt> ",
-		"--header", abs + "\nj/k: move · enter: toggle dir / select file · /: search · esc: quit",
+		"--header", abs + "\nj/k move | enter toggle/select | / search | esc quit",
 		"--bind", "start:hide-input",
 		"--bind", "j:down",
 		"--bind", "k:up",
