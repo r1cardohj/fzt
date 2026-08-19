@@ -5,6 +5,9 @@
 A file tree explorer built on fzf's UI: tree navigation by default, `/` for
 fuzzy search, selected path printed to stdout.
 
+<img width="1498" height="850" alt="image" src="https://github.com/user-attachments/assets/64d6bac3-3afd-4a9b-ad65-ee9b60795982" />
+
+
 ## Install
 
 Download a prebuilt binary from
