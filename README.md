@@ -5,7 +5,25 @@
 A file tree explorer built on fzf's UI: tree navigation by default, `/` for
 fuzzy search, selected path printed to stdout.
 
-## Build
+## Install
+
+Download a prebuilt binary from
+[Releases](https://github.com/r1cardohj/fzt/releases) (Linux / macOS / Windows):
+
+```bash
+# e.g. Linux amd64
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-linux-amd64.tar.gz
+tar xzf fzt-v0.0.1-linux-amd64.tar.gz
+sudo install -m755 fzt-v0.0.1-linux-amd64/fzt /usr/local/bin/
+```
+
+Or with Go:
+
+```bash
+go install github.com/r1cardohj/fzt@latest
+```
+
+## Build from source
 
 ```bash
 make build        # or: go build -o fzt .

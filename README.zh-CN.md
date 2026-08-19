@@ -4,7 +4,24 @@
 
 基于 fzf UI 的文件树浏览器：默认树形导航，`/` 模糊搜索，选中的路径输出到 stdout。
 
-## 构建
+## 安装
+
+从 [Releases](https://github.com/r1cardohj/fzt/releases) 下载预编译二进制（Linux / macOS / Windows）：
+
+```bash
+# 以 Linux amd64 为例
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-linux-amd64.tar.gz
+tar xzf fzt-v0.0.1-linux-amd64.tar.gz
+sudo install -m755 fzt-v0.0.1-linux-amd64/fzt /usr/local/bin/
+```
+
+或用 Go 安装：
+
+```bash
+go install github.com/r1cardohj/fzt@latest
+```
+
+## 从源码构建
 
 ```bash
 make build        # 或者: go build -o fzt .
