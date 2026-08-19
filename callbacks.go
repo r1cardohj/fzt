@@ -11,18 +11,25 @@ import (
 // FZF_QUERY to these child processes, which is how they tell search mode
 // (non-empty query) apart from tree mode.
 
-// rowsCmd is the shell command that prints the current candidate list.
+// rowsCmd is the shell command that prints the tree-view candidate list.
 func rowsCmd(sessionDir string) string {
 	exe, _ := os.Executable()
 	return shellQuote(exe) + " __rows --session " + shellQuote(sessionDir)
 }
 
-// cmdRows prints candidate lines: empty query -> indented tree view honoring
-// collapsed dirs; non-empty query -> flat full-path list for readable search
+// searchRowsCmd is the shell command that prints the flat path list used in
+// search mode.
+func searchRowsCmd(sessionDir string) string {
+	exe, _ := os.Executable()
+	return shellQuote(exe) + " __rows --session " + shellQuote(sessionDir) + " --search"
+}
+
+// cmdRows prints candidate lines: the indented tree view honoring collapsed
+// dirs, or (with --search) the flat full-path list for readable search
 // results.
-func cmdRows(sessionDir string) {
+func cmdRows(sessionDir string, search bool) {
 	root := buildTree(sessionRoot(sessionDir))
-	if os.Getenv("FZF_QUERY") != "" {
+	if search {
 		for _, line := range pathRows(root) {
 			fmt.Println(line)
 		}
@@ -55,7 +62,7 @@ func cmdEnter(sessionDir, line string) {
 			expanded[p] = true
 		}
 		saveExpanded(sessionDir, expanded)
-		if os.Getenv("FZF_QUERY") != "" {
+		if loadMode(sessionDir) == "search" {
 			saveMode(sessionDir, "tree")
 			fmt.Print(treeModeActions(sessionDir))
 		} else {

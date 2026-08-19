@@ -28,7 +28,8 @@ func cmdUI(rootArg string) int {
 
 	exe, _ := os.Executable()
 	searchMode := "execute-silent(" + shellQuote(exe) + " __mode --session " + shellQuote(sessionDir) + " search)" +
-		"+show-input+enable-search+unbind(j,k)+change-prompt(search> )"
+		"+show-input+enable-search+unbind(j,k)+change-prompt(search> )" +
+		"+reload-sync(" + searchRowsCmd(sessionDir) + ")"
 	opts, err := fzf.ParseOptions(true, []string{
 		"--delimiter", "\t",
 		"--nth", "1", // search the path field
@@ -45,7 +46,6 @@ func cmdUI(rootArg string) int {
 		"--bind", "j:down",
 		"--bind", "k:up",
 		"--bind", "/:" + searchMode,
-		"--bind", "change:reload-sync(" + rowsCmd(sessionDir) + ")",
 		"--bind", "enter:transform(" + shellQuote(exe) + " __enter --session " + shellQuote(sessionDir) + " -- {})",
 		"--bind", "esc:transform(" + shellQuote(exe) + " __esc --session " + shellQuote(sessionDir) + ")",
 	})

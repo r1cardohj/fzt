@@ -32,7 +32,7 @@ func main() {
 	if len(args) > 0 {
 		switch args[0] {
 		case "__rows":
-			cmdRows(flagValue(args, "--session"))
+			cmdRows(flagValue(args, "--session"), hasFlag(args, "--search"))
 			return
 		case "__enter":
 			line := ""
@@ -67,4 +67,13 @@ func flagValue(args []string, name string) string {
 		}
 	}
 	return ""
+}
+
+func hasFlag(args []string, name string) bool {
+	for _, a := range args {
+		if a == name {
+			return true
+		}
+	}
+	return false
 }

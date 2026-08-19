@@ -3,7 +3,11 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
+	"sync"
+
+	"github.com/charlievieth/fastwalk"
 )
 
 // Node is one entry in the directory tree.
@@ -14,34 +18,57 @@ type Node struct {
 	Children []*Node
 }
 
-// buildTree scans root recursively (skipping hidden files) and returns the
-// root node. Children are sorted: directories first, then files.
+// buildTree scans root concurrently with fastwalk (the same walker fzf uses
+// internally), skipping hidden files, and returns the root node. Children are
+// sorted: directories first, then files.
 func buildTree(root string) *Node {
 	rootNode := &Node{Name: filepath.Base(root), Path: root, IsDir: true}
-	stack := []*Node{rootNode}
-	for len(stack) > 0 {
-		n := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		entries, err := os.ReadDir(n.Path) // already sorted by name
-		if err != nil {
-			continue
+	type entry struct {
+		path  string
+		isDir bool
+	}
+	var (
+		entries []entry
+		mu      sync.Mutex
+	)
+	conf := fastwalk.Config{Follow: false}
+	fastwalk.Walk(&conf, root, func(path string, de os.DirEntry, err error) error {
+		if err != nil || path == root { // fastwalk emits the root itself too
+			return nil
 		}
-		var dirs, files []*Node
-		for _, e := range entries {
-			if strings.HasPrefix(e.Name(), ".") { // skip hidden files
-				continue
+		if strings.HasPrefix(de.Name(), ".") { // skip hidden files
+			if de.IsDir() {
+				return filepath.SkipDir
 			}
-			c := &Node{Name: e.Name(), Path: filepath.Join(n.Path, e.Name()), IsDir: e.IsDir()}
-			if c.IsDir {
-				dirs = append(dirs, c)
-			} else {
-				files = append(files, c)
+			return nil
+		}
+		mu.Lock()
+		entries = append(entries, entry{path, de.IsDir()})
+		mu.Unlock()
+		return nil
+	})
+
+	// Assemble the tree: parents before children (sorted by depth).
+	sort.Slice(entries, func(i, j int) bool {
+		return strings.Count(entries[i].path, string(filepath.Separator)) <
+			strings.Count(entries[j].path, string(filepath.Separator))
+	})
+	nodes := map[string]*Node{root: rootNode}
+	for _, e := range entries {
+		n := &Node{Name: filepath.Base(e.path), Path: e.path, IsDir: e.isDir}
+		nodes[e.path] = n
+		if parent, ok := nodes[filepath.Dir(e.path)]; ok {
+			parent.Children = append(parent.Children, n)
+		}
+	}
+	for _, n := range nodes {
+		sort.Slice(n.Children, func(i, j int) bool {
+			a, b := n.Children[i], n.Children[j]
+			if a.IsDir != b.IsDir {
+				return a.IsDir // directories first
 			}
-		}
-		n.Children = append(dirs, files...)
-		for i := len(dirs) - 1; i >= 0; i-- {
-			stack = append(stack, dirs[i])
-		}
+			return a.Name < b.Name
+		})
 	}
 	return rootNode
 }

@@ -2,10 +2,12 @@ module fzt
 
 go 1.26.5
 
-require github.com/junegunn/fzf v0.65.1
+require (
+	github.com/charlievieth/fastwalk v1.0.12
+	github.com/junegunn/fzf v0.65.1
+)
 
 require (
-	github.com/charlievieth/fastwalk v1.0.12 // indirect
 	github.com/gdamore/encoding v1.0.1 // indirect
 	github.com/gdamore/tcell/v2 v2.8.1 // indirect
 	github.com/junegunn/go-shellwords v0.0.0-20250127100254-2aa3b3277741 // indirect
