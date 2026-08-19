@@ -128,8 +128,10 @@ func rows(root *Node, expanded map[string]bool) []string {
 }
 
 // pathRows renders every node (except root) as a flat, fully-qualified path
-// line for search mode: "relpath<TAB>styled relpath" where the directory
+// line for search mode: "relpath<TAB>  styled relpath" where the directory
 // part is dimmed and directories are colored, so nesting stays readable.
+// The 2-space display prefix keeps names aligned with tree mode, where every
+// line carries a 2-cell marker.
 func pathRows(root *Node) []string {
 	out := []string{}
 	var walk func(n *Node)
@@ -139,11 +141,11 @@ func pathRows(root *Node) []string {
 		var disp string
 		switch {
 		case n.IsDir:
-			disp = "\x1b[34m" + rel + "/\x1b[0m"
+			disp = "  \x1b[34m" + rel + "/\x1b[0m"
 		case dir != "":
-			disp = "\x1b[2m" + dir + "\x1b[0m" + base
+			disp = "  \x1b[2m" + dir + "\x1b[0m" + base
 		default:
-			disp = base
+			disp = "  " + base
 		}
 		out = append(out, rel+"\t"+disp)
 		for _, c := range n.Children {
