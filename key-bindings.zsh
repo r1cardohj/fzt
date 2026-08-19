@@ -5,7 +5,7 @@
 
 fzt-widget() {
   local selected
-  selected="$(command fzt --height=40% 2>/dev/null)" || { zle reset-prompt; return 1; }
+  selected="$(command fzt --height=60% 2>/dev/null)" || { zle reset-prompt; return 1; }
   LBUFFER+="${(q)selected}"
   zle reset-prompt
   return 0

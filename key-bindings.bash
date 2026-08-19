@@ -6,7 +6,7 @@
 
 __fzt_select__() {
   local selected
-  selected="$(command fzt --height=40% "$@" 2>/dev/null)" || return
+  selected="$(command fzt --height=60% "$@" 2>/dev/null)" || return
   printf -v selected '%q' "$selected" # shell 转义，防空格/特殊字符
   READLINE_LINE="${READLINE_LINE:0:$READLINE_POINT}${selected}${READLINE_LINE:$READLINE_POINT}"
   READLINE_POINT=$((READLINE_POINT + ${#selected}))
