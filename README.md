@@ -11,16 +11,37 @@ fuzzy search, selected path printed to stdout.
 ## Install
 
 Download a prebuilt binary from
-[Releases](https://github.com/r1cardohj/fzt/releases) (Linux / macOS / Windows):
+[Releases](https://github.com/r1cardohj/fzt/releases), or use `go install`.
+
+### Linux
 
 ```bash
-# e.g. Linux amd64
+# amd64 (x86_64)
 curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-linux-amd64.tar.gz
 tar xzf fzt-v0.0.1-linux-amd64.tar.gz
 sudo install -m755 fzt-v0.0.1-linux-amd64/fzt /usr/local/bin/
+
+# arm64 (e.g. Raspberry Pi, ARM servers)
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-linux-arm64.tar.gz
+tar xzf fzt-v0.0.1-linux-arm64.tar.gz
+sudo install -m755 fzt-v0.0.1-linux-arm64/fzt /usr/local/bin/
 ```
 
-Or with Go:
+### macOS
+
+```bash
+# Apple Silicon (M1/M2/M3...)
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-darwin-arm64.tar.gz
+tar xzf fzt-v0.0.1-darwin-arm64.tar.gz
+sudo install -m755 fzt-v0.0.1-darwin-arm64/fzt /usr/local/bin/
+
+# Intel
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-darwin-amd64.tar.gz
+tar xzf fzt-v0.0.1-darwin-amd64.tar.gz
+sudo install -m755 fzt-v0.0.1-darwin-amd64/fzt /usr/local/bin/
+```
+
+### With Go
 
 ```bash
 go install github.com/r1cardohj/fzt@latest

@@ -6,16 +6,37 @@
 
 ## 安装
 
-从 [Releases](https://github.com/r1cardohj/fzt/releases) 下载预编译二进制（Linux / macOS / Windows）：
+从 [Releases](https://github.com/r1cardohj/fzt/releases) 下载预编译二进制，或用 `go install`。
+
+### Linux
 
 ```bash
-# 以 Linux amd64 为例
+# amd64 (x86_64)
 curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-linux-amd64.tar.gz
 tar xzf fzt-v0.0.1-linux-amd64.tar.gz
 sudo install -m755 fzt-v0.0.1-linux-amd64/fzt /usr/local/bin/
+
+# arm64（树莓派、ARM 服务器等）
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-linux-arm64.tar.gz
+tar xzf fzt-v0.0.1-linux-arm64.tar.gz
+sudo install -m755 fzt-v0.0.1-linux-arm64/fzt /usr/local/bin/
 ```
 
-或用 Go 安装：
+### macOS
+
+```bash
+# Apple Silicon（M1/M2/M3……）
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-darwin-arm64.tar.gz
+tar xzf fzt-v0.0.1-darwin-arm64.tar.gz
+sudo install -m755 fzt-v0.0.1-darwin-arm64/fzt /usr/local/bin/
+
+# Intel
+curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.1/fzt-v0.0.1-darwin-amd64.tar.gz
+tar xzf fzt-v0.0.1-darwin-amd64.tar.gz
+sudo install -m755 fzt-v0.0.1-darwin-amd64/fzt /usr/local/bin/
+```
+
+### 用 Go 安装
 
 ```bash
 go install github.com/r1cardohj/fzt@latest
