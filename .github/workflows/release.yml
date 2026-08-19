@@ -6,6 +6,11 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:  # manual fallback: Actions tab -> release -> Run workflow
+    inputs:
+      version:
+        description: "Version (e.g. v0.0.1)"
+        required: true
 
 permissions:
   contents: write
@@ -21,7 +26,7 @@ jobs:
           go-version: "stable"
 
       - name: Build release archives
-        run: make release VERSION=${GITHUB_REF_NAME}
+        run: make release VERSION=${{ inputs.version || github.ref_name }}
 
       - name: Publish to GitHub Releases
         uses: softprops/action-gh-release@v2
