@@ -10,36 +10,21 @@ fuzzy search, selected path printed to stdout.
 
 ## Install
 
-Download a prebuilt binary from
-[Releases](https://github.com/r1cardohj/fzt/releases), or use `go install`.
-
-### Linux
-
 ```bash
-# amd64 (x86_64)
-curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.5/fzt-v0.0.5-linux-amd64.tar.gz
-tar xzf fzt-v0.0.5-linux-amd64.tar.gz
-sudo install -m755 fzt-v0.0.5-linux-amd64/fzt /usr/local/bin/
-
-# arm64 (e.g. Raspberry Pi, ARM servers)
-curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.5/fzt-v0.0.5-linux-arm64.tar.gz
-tar xzf fzt-v0.0.5-linux-arm64.tar.gz
-sudo install -m755 fzt-v0.0.5-linux-arm64/fzt /usr/local/bin/
+curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | sh
 ```
 
-### macOS
+Installs the latest release to `/usr/local/bin` (uses `sudo` only when
+needed, and verifies the archive against the release checksums). To pin a
+version or install without sudo:
 
 ```bash
-# Apple Silicon (M1/M2/M3...)
-curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.5/fzt-v0.0.5-darwin-arm64.tar.gz
-tar xzf fzt-v0.0.5-darwin-arm64.tar.gz
-sudo install -m755 fzt-v0.0.5-darwin-arm64/fzt /usr/local/bin/
-
-# Intel
-curl -LO https://github.com/r1cardohj/fzt/releases/download/v0.0.5/fzt-v0.0.5-darwin-amd64.tar.gz
-tar xzf fzt-v0.0.5-darwin-amd64.tar.gz
-sudo install -m755 fzt-v0.0.5-darwin-amd64/fzt /usr/local/bin/
+curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | sh -s -- v0.0.5
+curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | PREFIX=~/.local sh
 ```
+
+Prebuilt archives for Linux/macOS/Windows are also on the
+[Releases](https://github.com/r1cardohj/fzt/releases) page.
 
 ### With Go
 
