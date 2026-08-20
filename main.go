@@ -9,6 +9,7 @@
 //	main.go      entry point and subcommand dispatch
 //	tree.go      directory scanning and candidate rendering
 //	session.go   per-session state (expanded dirs, UI mode)
+//	highlight.go syntax highlighting for the preview window
 //	callbacks.go hidden subcommands invoked by fzf reload/transform bindings
 //	ui.go        the embedded fzf UI
 package main
