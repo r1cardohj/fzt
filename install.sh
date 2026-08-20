@@ -3,12 +3,12 @@
 #
 #   curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | sh
 #   curl -fsSL ... | sh -s -- v0.0.5    # pin a version
-#   PREFIX=~/.local sh install.sh       # install without sudo
+#   PREFIX=/usr/local sh install.sh     # system-wide install (may use sudo)
 set -eu
 
 REPO="r1cardohj/fzt"
 VERSION="${1:-latest}"
-PREFIX="${PREFIX:-/usr/local}"
+PREFIX="${PREFIX:-$HOME/.local}"
 
 case "$(uname -s)" in
   Linux)  os=linux ;;
@@ -49,7 +49,12 @@ if [ -z "$expected" ] || [ "$expected" != "$actual" ]; then
 fi
 
 tar xzf "$tmp/$name.tar.gz" -C "$tmp"
+mkdir -p "$PREFIX/bin"
 sudo=""
 [ -w "$PREFIX/bin" ] || sudo="sudo"
 $sudo install -m 0755 "$tmp/$name/fzt" "$PREFIX/bin/fzt"
 echo "==> Installed fzt $VERSION to $PREFIX/bin/fzt"
+case ":$PATH:" in
+  *":$PREFIX/bin:"*) ;;
+  *) echo "==> NOTE: $PREFIX/bin is not in your PATH; add it to your shell profile" ;;
+esac
