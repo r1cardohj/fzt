@@ -14,13 +14,13 @@ fuzzy search, selected path printed to stdout.
 curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | sh
 ```
 
-Installs the latest release to `/usr/local/bin` (uses `sudo` only when
-needed, and verifies the archive against the release checksums). To pin a
-version or install without sudo:
+Installs the latest release to `~/.local/bin` (no sudo needed; the archive
+is verified against the release checksums). To pin a version or install
+system-wide:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | sh -s -- v0.0.5
-curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | PREFIX=~/.local sh
+curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | PREFIX=/usr/local sh
 ```
 
 Prebuilt archives for Linux/macOS/Windows are also on the

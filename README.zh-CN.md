@@ -10,12 +10,12 @@
 curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | sh
 ```
 
-安装最新版本到 `/usr/local/bin`（仅在需要时使用 `sudo`，并会校验 release 的
-checksums）。固定版本或免 sudo 安装：
+安装最新版本到 `~/.local/bin`（无需 sudo，并会校验 release 的
+checksums）。固定版本或系统级安装：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | sh -s -- v0.0.5
-curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | PREFIX=~/.local sh
+curl -fsSL https://raw.githubusercontent.com/r1cardohj/fzt/main/install.sh | PREFIX=/usr/local sh
 ```
 
 Linux/macOS/Windows 的预编译归档也可以在
