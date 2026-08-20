@@ -1,5 +1,5 @@
 # fzt key bindings for bash —— 在 ~/.bashrc 里:
-#   source /path/to/fzt/key-bindings.bash
+#   eval "$(fzt --bash)"
 #
 # Ctrl-F: 打开 fzt 文件树，选中的路径插入到当前命令行光标处
 # （类似 fzf 官方的 Ctrl-T）

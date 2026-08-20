@@ -81,10 +81,10 @@ fzt | xargs wc -l
 
 ```bash
 # bash: add to ~/.bashrc
-source /path/to/fzt/key-bindings.bash
+eval "$(fzt --bash)"
 
 # zsh: add to ~/.zshrc
-source /path/to/fzt/key-bindings.zsh
+eval "$(fzt --zsh)"
 ```
 
 Press **Ctrl-F** on the command line to open the tree; the selected path is
