@@ -4,6 +4,8 @@
 
 基于 fzf UI 的文件树浏览器：默认树形导航，`/` 模糊搜索，选中的路径输出到 stdout。
 
+![demo](docs/demo.gif)
+
 ## 安装
 
 ```bash
