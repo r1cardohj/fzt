@@ -6,6 +6,7 @@
 fzt-widget() {
   local selected
   selected="$(command fzt --height=60% 2>/dev/null)" || { zle reset-prompt; return 1; }
+  [ -n "$selected" ] || { zle reset-prompt; return 1; } # 防御:退出码 0 但无输出时不插入
   LBUFFER+="${(q)selected}"
   zle reset-prompt
   return 0
