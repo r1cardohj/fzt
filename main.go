@@ -47,6 +47,15 @@ func main() {
 		case "__esc":
 			cmdEsc(flagValue(args, "--session"))
 			return
+		case "__preview":
+			line := ""
+			for i, a := range args {
+				if a == "--" && i+1 < len(args) {
+					line = args[i+1]
+				}
+			}
+			cmdPreview(flagValue(args, "--session"), line)
+			return
 		case "__mode":
 			saveMode(flagValue(args, "--session"), args[len(args)-1])
 			return
