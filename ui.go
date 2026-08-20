@@ -42,7 +42,10 @@ func cmdUI(rootArg string, extraOpts []string) int {
 		"--disabled", // tree mode: pure navigation, no query input
 		"--layout", "reverse",
 		"--prompt", "fzt> ",
-		"--header", abs + "\nj/k move | enter toggle/select | / search | esc quit",
+		"--header", abs + "\nj/k move | enter toggle/select | / search | ctrl-/ preview | esc quit",
+		"--preview", previewCmd(sessionDir) + " -- {}",
+		"--preview-window", "right:50%:wrap",
+		"--bind", "ctrl-/:toggle-preview",
 		"--bind", "start:hide-input",
 		"--bind", "j:down",
 		"--bind", "k:up",

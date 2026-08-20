@@ -67,7 +67,12 @@ fzt [directory]   # defaults to the current directory
 | `j`/`k`/arrow keys | Move cursor |
 | `Enter` | Directory: collapse/expand · File: select and exit |
 | `/` | Open the search box |
+| `ctrl-/` | Toggle the preview window |
 | `esc`/`ctrl-c` | Quit (exit code 130) |
+
+The preview window (fzf's native `--preview`, right side) shows a directory
+listing for directories and file contents for files (binary files are
+detected and not dumped).
 
 ### Search mode (after `/`)
 
