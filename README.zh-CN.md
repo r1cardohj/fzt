@@ -74,10 +74,10 @@ fzt | xargs wc -l
 
 ```bash
 # bash: 加到 ~/.bashrc
-source /path/to/fzt/key-bindings.bash
+eval "$(fzt --bash)"
 
 # zsh: 加到 ~/.zshrc
-source /path/to/fzt/key-bindings.zsh
+eval "$(fzt --zsh)"
 ```
 
 命令行按 **Ctrl-F** 打开文件树，选中的路径插入到光标处。
