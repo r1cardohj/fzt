@@ -173,6 +173,14 @@ func previewFile(p string, info os.FileInfo) {
 		fmt.Printf("binary file (%d bytes)\n", info.Size())
 		return
 	}
+	// Syntax highlighting first (data is already capped, so lexing stays
+	// cheap); plain text when no lexer matches.
+	if highlight(filepath.Base(p), data) {
+		if n == previewMaxBytes {
+			fmt.Println("\u2026")
+		}
+		return
+	}
 	lines := strings.SplitAfter(string(data), "\n")
 	for i, l := range lines {
 		if i >= previewMaxLines {
