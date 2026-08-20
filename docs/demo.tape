@@ -1,9 +1,10 @@
 # fzt demo recording. Regenerate docs/demo.gif from the repo root with:
-#   vhs docs/demo.tape && docs/demo-overlay.sh
-# The demo tree under /tmp/fzt-demo mirrors the layout of `make test`.
-# Key hints are not recorded; demo-overlay.sh overlays them with ffmpeg.
+#   sh docs/demo-setup.sh && vhs docs/demo.tape
 #
-# Two rounds: tree mode first (move/expand/select), then search mode.
+# Three scenes, all executed for real:
+#   1. cat <Ctrl-F> pick a nested file in tree mode, run it
+#   2. rm <Ctrl-F> pick a file in search mode, run it (then ls proves it)
+#   3. wc -l $(fzt) and fzt | xargs wc -l
 
 Output docs/demo.gif
 
@@ -19,41 +20,66 @@ Set Theme "Catppuccin Mocha"
 Hide
 Type "export PATH=/home/houjun/project/fzt:$PATH"
 Enter
+Type 'eval "$(fzt --bash)"'
+Enter
 Type "cd /tmp/fzt-demo && clear"
 Enter
 Sleep 500ms
 Show
 
-Type 'eval "$(fzt --bash)"'
+# Scene 1: cat a nested file, picked in tree mode
+Type "cat "
+Sleep 600ms
+Ctrl+F
+Sleep 2s
+Type "j"
+Sleep 800ms
 Enter
 Sleep 1s
-
-# Round 1: tree mode — move, expand, select a file
-Type "nvim "
-Sleep 800ms
-Ctrl+F
-Sleep 2.5s
 Type "j"
-Sleep 1.2s
+Sleep 800ms
 Enter
-Sleep 1.5s
-Type "jj"
+Sleep 1s
+Type "j"
+Sleep 800ms
+Enter
 Sleep 1.2s
 Enter
 Sleep 2s
 
-# Transition: clear the command line
-Ctrl+U
-Sleep 1s
-
-# Round 2: search mode — fuzzy match straight into a nested path
-Type "nvim "
-Sleep 800ms
+# Scene 2: rm a file, found via search mode
+Type "rm "
+Sleep 600ms
 Ctrl+F
-Sleep 2.5s
+Sleep 2s
 Type "/"
+Sleep 600ms
+Type "test_m"
+Sleep 1.2s
+Enter
+Sleep 1.2s
+Enter
+Sleep 1.5s
+Type "ls tests"
+Enter
+Sleep 1.5s
+
+# Scene 3: fzt inside command substitution and pipes
+Type "wc -l $(fzt)"
+Sleep 600ms
+Enter
+Sleep 2s
+Type "jjj"
 Sleep 800ms
-Type "config"
-Sleep 1.8s
+Enter
+Sleep 2s
+Type "fzt | xargs wc -l"
+Sleep 600ms
+Enter
+Sleep 2s
+Enter
+Sleep 600ms
+Type "j"
+Sleep 800ms
 Enter
 Sleep 2s
