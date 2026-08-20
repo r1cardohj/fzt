@@ -69,19 +69,33 @@ func cmdUI(rootArg string, extraOpts []string) int {
 	}
 	close(opts.Input)
 
-	accepted := []string{}
 	opts.Output = make(chan string, 16)
-	go func() {
-		for s := range opts.Output {
-			accepted = append(accepted, s)
-		}
-	}()
 
 	code, err := fzf.Run(opts)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "fzt:", err)
 	}
-	if code == fzf.ExitOk && len(accepted) > 0 {
+
+	// fzf writes the accepted line into this buffered channel right before
+	// Run returns and never closes it, so drain it here, synchronously.
+	// Reading from a separate goroutine raced with the len check below and
+	// made fzt occasionally exit 0 without printing the selection.
+	accepted := []string{}
+drain:
+	for {
+		select {
+		case s := <-opts.Output:
+			accepted = append(accepted, s)
+		default:
+			break drain
+		}
+	}
+	if code == fzf.ExitOk && len(accepted) == 0 {
+		// Accept without a current item: report "no match" so callers don't
+		// mistake empty stdout for a selection.
+		return fzf.ExitNoMatch
+	}
+	if code == fzf.ExitOk {
 		rel := strings.SplitN(accepted[0], "\t", 2)[0]
 		fmt.Println(filepath.Clean(filepath.Join(rootArg, rel)))
 	}
