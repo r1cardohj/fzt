@@ -1,4 +1,4 @@
-module fzt
+module github.com/r1cardohj/fzt
 
 go 1.26.5
 
