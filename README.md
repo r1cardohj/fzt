@@ -110,3 +110,7 @@ inserted at the cursor.
 ```bash
 make test
 ```
+
+## License
+
+[MIT](LICENSE)

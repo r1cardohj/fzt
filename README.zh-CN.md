@@ -102,3 +102,7 @@ source /path/to/fzt/key-bindings.zsh
 ```bash
 make test
 ```
+
+## 许可证
+
+[MIT](LICENSE)
