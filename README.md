@@ -72,7 +72,9 @@ fzt [directory]   # defaults to the current directory
 
 The preview window (fzf's native `--preview`, right side) shows a directory
 listing for directories and file contents for files (binary files are
-detected and not dumped).
+detected and not dumped). File previews are syntax-highlighted with
+[chroma](https://github.com/alecthomas/chroma) mapped onto the terminal's
+16-color palette, so colors follow your terminal theme.
 
 ### Search mode (after `/`)
 
