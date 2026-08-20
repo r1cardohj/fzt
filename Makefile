@@ -40,7 +40,7 @@ release:
 		mkdir -p dist/$$name; \
 		GOOS=$$os GOARCH=$$arch go build $(GOFLAGS) -ldflags '$(LDFLAGS)' \
 			-o dist/$$name/$(BIN)$$ext . || exit 1; \
-		cp README.md key-bindings.bash key-bindings.zsh dist/$$name/; \
+		cp README.md dist/$$name/; \
 		if [ "$$os" = windows ]; then \
 			(cd dist && zip -qr $$name.zip $$name); \
 		else \

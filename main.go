@@ -10,6 +10,7 @@
 //	tree.go      directory scanning and candidate rendering
 //	session.go   per-session state (expanded dirs, UI mode)
 //	highlight.go syntax highlighting for the preview window
+//	shell.go     embedded bash/zsh key bindings (--bash/--zsh)
 //	callbacks.go hidden subcommands invoked by fzf reload/transform bindings
 //	ui.go        the embedded fzf UI
 package main
@@ -25,6 +26,7 @@ import (
 
 func usage() {
 	fmt.Fprintln(os.Stderr, "usage: fzt [--height=HEIGHT] [directory]")
+	fmt.Fprintln(os.Stderr, "       fzt --bash | --zsh   print shell key bindings (Ctrl-F)")
 	os.Exit(fzf.ExitError)
 }
 
@@ -59,6 +61,12 @@ func main() {
 			return
 		case "__mode":
 			saveMode(flagValue(args, "--session"), args[len(args)-1])
+			return
+		case "--bash":
+			fmt.Print(bashKeyBindings)
+			return
+		case "--zsh":
+			fmt.Print(zshKeyBindings)
 			return
 		case "-h", "--help":
 			usage()

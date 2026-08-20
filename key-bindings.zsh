@@ -1,5 +1,5 @@
 # fzt key bindings for zsh —— 在 ~/.zshrc 里:
-#   source /path/to/fzt/key-bindings.zsh
+#   eval "$(fzt --zsh)"
 #
 # Ctrl-F: 打开 fzt 文件树，选中的路径插入到当前命令行光标处
 
