@@ -52,6 +52,7 @@ fzt [directory]   # defaults to the current directory
 | `j`/`k`/arrow keys | Move cursor |
 | `Enter` | Directory: collapse/expand · File: select and exit |
 | `/` | Open the search box |
+| `.` | Toggle hidden files |
 | `ctrl-/` | Toggle the preview window |
 | `esc`/`ctrl-c` | Quit (exit code 130) |
 
@@ -64,6 +65,7 @@ detected and not dumped). File previews are syntax-highlighted with
 ### Search mode (after `/`)
 
 - Type to fuzzy-search against full relative paths
+- `alt-.` → toggle hidden files (`.` itself types a dot into the query)
 - `Enter` on a file → output it; on a directory → jump back to tree mode
   with that directory expanded
 - `esc` → back to tree mode

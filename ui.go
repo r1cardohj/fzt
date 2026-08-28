@@ -29,7 +29,7 @@ func cmdUI(rootArg string, extraOpts []string) int {
 
 	exe, _ := os.Executable()
 	searchMode := "execute-silent(" + shellQuote(exe) + " __mode --session " + shellQuote(sessionDir) + " search)" +
-		"+show-input+enable-search+unbind(j,k)+change-prompt(search> )" +
+		"+show-input+enable-search+unbind(j,k,.)+change-prompt(search> )" +
 		"+reload-sync(" + searchRowsCmd(sessionDir) + ")"
 	fzfArgs := []string{
 		"--delimiter", "\t",
@@ -42,7 +42,7 @@ func cmdUI(rootArg string, extraOpts []string) int {
 		"--disabled", // tree mode: pure navigation, no query input
 		"--layout", "reverse",
 		"--prompt", "fzt> ",
-		"--header", abs + "\nj/k move | enter toggle/select | / search | ctrl-/ preview | esc quit",
+		"--header", abs + "\nj/k move | enter toggle/select | / search | . hidden | ctrl-/ preview | esc quit",
 		"--preview", previewCmd(sessionDir) + " -- {}",
 		"--preview-window", "right:50%:wrap",
 		"--bind", "ctrl-/:toggle-preview",
@@ -50,6 +50,11 @@ func cmdUI(rootArg string, extraOpts []string) int {
 		"--bind", "j:down",
 		"--bind", "k:up",
 		"--bind", "/:" + searchMode,
+		// "." toggles hidden files in tree mode; search mode unbinds it so
+		// dots can be typed into the query, where alt-. toggles instead
+		// (alt-. works in tree mode too).
+		"--bind", ".:transform(" + shellQuote(exe) + " __hidden --session " + shellQuote(sessionDir) + ")",
+		"--bind", "alt-.:transform(" + shellQuote(exe) + " __hidden --session " + shellQuote(sessionDir) + ")",
 		"--bind", "enter:transform(" + shellQuote(exe) + " __enter --session " + shellQuote(sessionDir) + " -- {})",
 		"--bind", "esc:transform(" + shellQuote(exe) + " __esc --session " + shellQuote(sessionDir) + ")",
 	}
@@ -62,7 +67,7 @@ func cmdUI(rootArg string, extraOpts []string) int {
 	// Initial list via channel; subsequent updates happen through reload.
 	// Lazy scan: only the root is expanded at startup, so a huge tree opens
 	// instantly.
-	initial := rows(buildTreeLazy(abs, map[string]bool{abs: true}), map[string]bool{abs: true})
+	initial := rows(buildTreeLazy(abs, map[string]bool{abs: true}, false), map[string]bool{abs: true})
 	opts.Input = make(chan string, len(initial))
 	for _, line := range initial {
 		opts.Input <- line

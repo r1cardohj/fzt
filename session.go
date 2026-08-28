@@ -12,6 +12,7 @@ import (
 //	<session>/root      absolute path of the scanned root directory
 //	<session>/expanded  newline-separated paths of expanded directories
 //	<session>/mode      "tree" or "search"
+//	<session>/hidden    "on" when hidden files are shown (default: off)
 
 func sessionRoot(dir string) string {
 	b, _ := os.ReadFile(filepath.Join(dir, "root"))
@@ -44,6 +45,19 @@ func loadMode(dir string) string {
 
 func saveMode(dir, mode string) {
 	os.WriteFile(filepath.Join(dir, "mode"), []byte(mode), 0o644)
+}
+
+func hiddenOn(dir string) bool {
+	b, _ := os.ReadFile(filepath.Join(dir, "hidden"))
+	return strings.TrimSpace(string(b)) == "on"
+}
+
+func saveHidden(dir string, on bool) {
+	v := "off"
+	if on {
+		v = "on"
+	}
+	os.WriteFile(filepath.Join(dir, "hidden"), []byte(v), 0o644)
 }
 
 func shellQuote(s string) string {

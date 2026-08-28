@@ -32,11 +32,11 @@ var markerExpanded, markerCollapsed = func() (string, string) {
 }()
 
 // buildTree scans root concurrently with fastwalk (the same walker fzf uses
-// internally), skipping hidden files, and returns the root node. This is a
-// full scan used by search mode, where every path must be a candidate; tree
-// mode uses buildTreeLazy instead. Children are sorted: directories first,
-// then files.
-func buildTree(root string) *Node {
+// internally) and returns the root node; hidden files are skipped unless
+// showHidden is set. This is a full scan used by search mode, where every
+// path must be a candidate; tree mode uses buildTreeLazy instead. Children
+// are sorted: directories first, then files.
+func buildTree(root string, showHidden bool) *Node {
 	rootNode := &Node{Name: filepath.Base(root), Path: root, IsDir: true}
 	type entry struct {
 		path  string
@@ -51,7 +51,7 @@ func buildTree(root string) *Node {
 		if err != nil || path == root { // fastwalk emits the root itself too
 			return nil
 		}
-		if strings.HasPrefix(de.Name(), ".") { // skip hidden files
+		if !showHidden && strings.HasPrefix(de.Name(), ".") { // skip hidden files
 			if de.IsDir() {
 				return filepath.SkipDir
 			}
@@ -87,7 +87,7 @@ func buildTree(root string) *Node {
 // descended into, so opening fzt on a huge tree (node_modules, monorepos)
 // stays instant. A single ReadDir per expanded directory is cheap enough
 // that no concurrent walker is needed here.
-func buildTreeLazy(root string, expanded map[string]bool) *Node {
+func buildTreeLazy(root string, expanded map[string]bool, showHidden bool) *Node {
 	rootNode := &Node{Name: filepath.Base(root), Path: root, IsDir: true}
 	var scan func(n *Node)
 	scan = func(n *Node) {
@@ -96,7 +96,7 @@ func buildTreeLazy(root string, expanded map[string]bool) *Node {
 			return
 		}
 		for _, e := range entries {
-			if strings.HasPrefix(e.Name(), ".") { // skip hidden files
+			if !showHidden && strings.HasPrefix(e.Name(), ".") { // skip hidden files
 				continue
 			}
 			child := &Node{Name: e.Name(), Path: filepath.Join(n.Path, e.Name()), IsDir: e.IsDir()}
