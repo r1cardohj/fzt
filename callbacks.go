@@ -38,22 +38,37 @@ func previewCmd(sessionDir string) string {
 // back to a full fastwalk scan.
 func cmdRows(sessionDir string, search bool) {
 	root := sessionRoot(sessionDir)
+	showHidden := hiddenOn(sessionDir)
 	if search {
-		for _, line := range pathRows(buildTree(root)) {
+		for _, line := range pathRows(buildTree(root, showHidden)) {
 			fmt.Println(line)
 		}
 		return
 	}
 	expanded := loadExpanded(sessionDir)
-	for _, line := range rows(buildTreeLazy(root, expanded), expanded) {
+	for _, line := range rows(buildTreeLazy(root, expanded, showHidden), expanded) {
 		fmt.Println(line)
+	}
+}
+
+// cmdHidden is the . / alt-. transform callback: it flips the show-hidden
+// state and reloads the candidate list for whichever mode is active.
+func cmdHidden(sessionDir string) {
+	saveHidden(sessionDir, !hiddenOn(sessionDir))
+	if loadMode(sessionDir) == "search" {
+		fmt.Printf("reload-sync(%s)", searchRowsCmd(sessionDir))
+	} else {
+		fmt.Printf("reload-sync(%s)", rowsCmd(sessionDir))
 	}
 }
 
 // treeModeActions is the fzf action sequence that switches the UI back to
 // tree-navigation mode.
+// treeModeActions is the fzf action sequence that switches the UI back to
+// tree-navigation mode. rebind(.) restores the hidden-file toggle key,
+// which search mode unbinds so dots can be typed into the query.
 func treeModeActions(sessionDir string) string {
-	return "clear-query+hide-input+disable-search+rebind(j,k)+change-prompt(fzt> )" +
+	return "clear-query+hide-input+disable-search+rebind(j,k,.)+change-prompt(fzt> )" +
 		"+reload-sync(" + rowsCmd(sessionDir) + ")"
 }
 
@@ -115,13 +130,13 @@ func cmdPreview(sessionDir, line string) {
 		return
 	}
 	if info.IsDir() {
-		previewDir(p)
+		previewDir(p, hiddenOn(sessionDir))
 		return
 	}
 	previewFile(p, info)
 }
 
-func previewDir(p string) {
+func previewDir(p string, showHidden bool) {
 	entries, err := os.ReadDir(p)
 	if err != nil {
 		fmt.Println(err)
@@ -135,7 +150,7 @@ func previewDir(p string) {
 	})
 	count := 0
 	for _, e := range entries {
-		if strings.HasPrefix(e.Name(), ".") { // same hidden-file rule as the tree
+		if !showHidden && strings.HasPrefix(e.Name(), ".") { // same hidden-file rule as the tree
 			continue
 		}
 		if count >= previewMaxEntries {

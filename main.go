@@ -62,6 +62,9 @@ func main() {
 		case "__mode":
 			saveMode(flagValue(args, "--session"), args[len(args)-1])
 			return
+		case "__hidden":
+			cmdHidden(flagValue(args, "--session"))
+			return
 		case "--bash":
 			fmt.Print(bashKeyBindings)
 			return
